@@ -667,6 +667,8 @@ class CAT(object):
                     for ann in doc_annotations:
                         if not ann.get('killed', False):
                             cui = ann['cui']
+                            if cui not in self.cdb.cui2names.keys():
+                                continue
                             start = ann['start']
                             end = ann['end']
                             spacy_entity = tkns_from_doc(spacy_doc=spacy_doc, start=start, end=end)
@@ -676,7 +678,8 @@ class CAT(object):
                                           spacy_doc=spacy_doc,
                                           spacy_entity=spacy_entity,
                                           negative=deleted,
-                                          devalue_others=devalue_others)
+                                          devalue_others=devalue_others,
+                                          do_add_concept=False)
                     if train_from_false_positives:
                         fps = get_false_positives(doc, spacy_doc)
 
